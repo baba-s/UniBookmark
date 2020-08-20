@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Kogane.Internal
@@ -19,7 +20,7 @@ namespace Kogane.Internal
 		//==============================================================================
 		// プロパティ
 		//==============================================================================
-		public IReadOnlyList<BookmarkData> List => m_list;
+		[NotNull] public IReadOnlyList<BookmarkData> List => m_list;
 
 		//==============================================================================
 		// 関数

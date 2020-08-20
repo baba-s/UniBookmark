@@ -131,7 +131,8 @@ namespace Kogane.Internal
 			if ( string.IsNullOrWhiteSpace( guid ) ) return;
 			if ( BookmarkSaveData.List.Contains( guid ) ) return;
 
-			var id   = BookmarkSaveData.List.List.Max( x => x.id ) + 1;
+			var list = BookmarkSaveData.List.List;
+			var id   = list.Count <= 0 ? 1 : BookmarkSaveData.List.List.Max( x => x.id ) + 1;
 			var item = new BookmarkData( id, guid );
 
 			BookmarkSaveData.List.Add( item );
