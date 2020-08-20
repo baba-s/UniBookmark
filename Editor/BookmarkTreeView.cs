@@ -17,8 +17,8 @@ namespace Kogane.Internal
 		private enum ColumnType
 		{
 			NAME,
-			PING,
 			OPEN,
+			PING,
 			REMOVE,
 		}
 
