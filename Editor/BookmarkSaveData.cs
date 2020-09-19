@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+﻿using System.IO;
 using UnityEngine;
 
 namespace Kogane.Internal
@@ -11,7 +11,7 @@ namespace Kogane.Internal
 		//==============================================================================
 		// 定数
 		//==============================================================================
-		private const string KEY = "UniBookmark";
+		private const string PATH = "UniBookmark/settings.json";
 
 		//==============================================================================
 		// 変数(static)
@@ -31,11 +31,19 @@ namespace Kogane.Internal
 		/// </summary>
 		public static void Load()
 		{
-			// ユーザーごとにプロジェクト単位でブックマークをセーブできるようにするために
-			// EditorUserSettings.GetConfigValue を使用します
-			var json = EditorUserSettings.GetConfigValue( KEY );
+			if ( File.Exists( PATH ) )
+			{
+				var json = File.ReadAllText( PATH );
 
-			m_list = JsonUtility.FromJson<BookmarkList>( json ) ?? new BookmarkList();
+				m_list = string.IsNullOrWhiteSpace( json )
+						? new BookmarkList()
+						: JsonUtility.FromJson<BookmarkList>( json ) ?? new BookmarkList()
+					;
+			}
+			else
+			{
+				m_list = new BookmarkList();
+			}
 
 			// ID を割り振りし直し
 			// ID を割り振らないとすべての項目の ID が 0 になり、
@@ -51,9 +59,15 @@ namespace Kogane.Internal
 		/// </summary>
 		public static void Save()
 		{
-			var json = JsonUtility.ToJson( m_list );
+			var json = JsonUtility.ToJson( m_list, true );
+			var dir  = Path.GetDirectoryName( PATH );
 
-			EditorUserSettings.SetConfigValue( KEY, json );
+			if ( !Directory.Exists( dir ) )
+			{
+				Directory.CreateDirectory( dir );
+			}
+
+			File.WriteAllText( PATH, json );
 		}
 	}
 }
